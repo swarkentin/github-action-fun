@@ -15,19 +15,12 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
-  token-stuff:
-    runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ github.token }}
-    steps:
-      - run: env
-      - run: echo "${{ env.GITHUB_TOKEN }}"
-      - run: |
-          curl -i -H "Authorization: token ${{ env.GITHUB_TOKEN }}" https://api.github.com/users/swarkentin/repos
   token-stuff-no-env:
     runs-on: ubuntu-latest
     steps:
       - run: env
       - run: echo "${{ github.token }}"
+      - run: |
+          echo "${{ github.token }}" | base64
       - run: |
           curl -i -H "Authorization: token ${{ github.token }}" https://api.github.com/users/swarkentin/repos
