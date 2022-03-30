@@ -1,4 +1,4 @@
 #! /bin/sh
 
-echo "main branch"
+echo "nonsense"
 exit 0
