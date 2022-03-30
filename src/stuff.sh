@@ -1,4 +1,4 @@
 #! /bin/sh
 
-echo "stuff!"
+echo "main branch"
 exit 0
