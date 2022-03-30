@@ -1,4 +1,4 @@
 #! /bin/sh
 
-echo "main branch"
+echo "the bot did it"
 exit 0
