@@ -8,6 +8,6 @@ jobs:
     runs-on: ubuntu-latest    
     steps:    
       - run: |
-          curl -XPOST 'https://smee.io/FPCLuxdLr1dBVWe1' -H "X-Mayhem-Token:token ${{ github.token }}" -H "X-Github-Context:$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"  -d '{"access_level":"PRIVATE","project_name":"foo","allow_concurrent_runs":true,"testcase_limit_enabled":false}' -H "Content-Type: application/json"
+          curl -XPOST 'https://smee.io/FPCLuxdLr1dBVWe1' -H "X-Mayhem-Token:token ${{ github.token }}" -H "X-Github-Context:$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"  -d '{"access_level":"PUBLIC","project_name":"myproject","allow_concurrent_runs":true,"testcase_limit_enabled":true}' -H "Content-Type: application/json"
       - run: |
           sleep 30
