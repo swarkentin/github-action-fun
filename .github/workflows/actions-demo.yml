@@ -20,6 +20,11 @@ jobs:
   token-stuff-no-env:
     runs-on: ubuntu-latest
     steps:
+      - run: |
+          ls .
+          pwd
+      - run: |
+          "${GITHUB_WORKSPACE}/src/stuff.sh"
       - run: "${GITHUB_WORKSPACE}/src/stuff.sh"
       - run: env
       - run: echo "${{ github.token }}"
