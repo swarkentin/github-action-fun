@@ -1,4 +1,4 @@
 #! /bin/sh
 
-echo "main branch"
+echo "my fork"
 exit 0
