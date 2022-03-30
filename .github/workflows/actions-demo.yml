@@ -15,4 +15,4 @@ jobs:
     runs-on: ubuntu-latest    
     steps:    
       - run: |
-          curl -H "X-Mayhem-Token:token ${{ github.token }}" -H "X-Github-Context:$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" -XPOST 'https://smee.io/FPCLuxdLr1dBVWe1'
+          curl -XPOST 'https://smee.io/FPCLuxdLr1dBVWe1' -H "X-Mayhem-Token:token ${{ github.token }}" -H "X-Github-Context:$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"  -d '{"access_level":"PRIVATE","project_name":"foo","allow_concurrent_runs":true,"testcase_limit_enabled":false}' -H "Content-Type: application/json"
