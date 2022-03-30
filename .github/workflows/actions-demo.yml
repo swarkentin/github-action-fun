@@ -25,7 +25,9 @@ jobs:
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
-      - run: "${GITHUB_WORKSPACE}/src/stuff.sh"      
+          
+      # This script should have changes from the forked repo
+      - run: "${GITHUB_WORKSPACE}/src/stuff.sh"
       
   # This job runs mayhem for API, and requires our secret to run 
   # successfully.
@@ -37,6 +39,9 @@ jobs:
       with:
         ref: ${{github.event.pull_request.head.ref}}
         repository: ${{github.event.pull_request.head.repo.full_name}}
+
+    # This script should be run from the forked repo
+    - run: "${GITHUB_WORKSPACE}/src/stuff.sh"
 
     # Run Mayhem for API
     - name: Run Mayhem for API to check for vulnerabilities
