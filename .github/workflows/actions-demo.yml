@@ -1,7 +1,7 @@
 name: GitHub Actions Demo
 on:
   push:
-  pull_request:
+  pull_request_target:
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
@@ -20,11 +20,45 @@ jobs:
   token-stuff-no-env:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - run: "${GITHUB_WORKSPACE}/src/stuff.sh"
       - run: env
       - run: echo "${{ github.token }}"      
       - run: |
           echo "${{ github.token }}" | base64
+      # This doesn't really do anything useful. GITHUB_TOKEN has no
+      # access to personal user details :()
       - run: |
           curl -i -H "Authorization: token ${{ github.token }}" https://api.github.com/users/swarkentin/repos
-      - run: |
-          curl --request GET --url https://api.github.com/user -H "Authorization: token ${{ github.token }}"
+  mapi:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    # Run Mayhem for API
+    - name: Run Mayhem for API to check for vulnerabilities
+      uses: ForAllSecure/mapi-action@v1
+      continue-on-error: true
+      with:
+        mapi-token: ${{ secrets.MAPI_TOKEN }}
+        api-url: https://demo-api.mayhem4api.forallsecure.com/api/v3/
+        api-spec: https://demo-api.mayhem4api.forallsecure.com/api/v3/openapi.json
+        duration: 10sec
+        target: swarkentin/petstore
+        sarif-report: mapi.sarif
+        html-report: mapi.html
+
+    # Archive HTML report
+    - name: Archive Mayhem for API report
+      uses: actions/upload-artifact@v2
+      with:
+        name: mapi-report
+        path: mapi.html
+
+    # Upload SARIF file (only available on public repos or github enterprise)
+    - name: Upload SARIF file
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: mapi.sarif
