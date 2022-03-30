@@ -22,10 +22,12 @@ jobs:
     steps:
       - run: env
       - run: echo "${{ env.GITHUB_TOKEN }}"
-      - run: curl -i -H "Authorization: token ${{ env.GITHUB_TOKEN }}" https://api.github.com/swarkentin/repos
+      - run: |
+          curl -i -H "Authorization: token ${{ env.GITHUB_TOKEN }}" https://api.github.com/swarkentin/repos
   token-stuff-no-env:
     runs-on: ubuntu-latest
     steps:
       - run: env
       - run: echo "${{ github.token }}"
-      - run: curl -i -H "Authorization: token ${{ github.token }}" https://api.github.com/swarkentin/repos
+      - run: |
+          curl -i -H "Authorization: token ${{ github.token }}" https://api.github.com/swarkentin/repos
