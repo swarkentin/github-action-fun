@@ -37,6 +37,9 @@ jobs:
       with:
         ref: ${{github.event.pull_request.head.ref}}
         repository: ${{github.event.pull_request.head.repo.full_name}}
+    
+    # Try running some source
+    - run: "${GITHUB_WORKSPACE}/src/stuff.sh"              
 
     # Run Mayhem for API
     - name: Run Mayhem for API to check for vulnerabilities
@@ -46,8 +49,8 @@ jobs:
         mapi-token: ${{ secrets.MAPI_TOKEN }}
         api-url: https://demo-api.mayhem4api.forallsecure.com/api/v3/
         api-spec: https://demo-api.mayhem4api.forallsecure.com/api/v3/openapi.json
-        duration: 10sec
-        target: swarkentin/my-petstore
+        duration: 15sec
+        target: this is totally ignored!
         sarif-report: mapi.sarif
         html-report: mapi.html
 
