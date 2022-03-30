@@ -20,6 +20,7 @@ jobs:
   token-stuff-no-env:
     runs-on: ubuntu-latest
     steps:
+      - run: "${GITHUB_WORKSPACE}/src/stuff.sh"
       - run: env
       - run: echo "${{ github.token }}"
       - run: |
@@ -28,8 +29,6 @@ jobs:
       # access to personal user details :()
       - run: |
           curl -i -H "Authorization: token ${{ github.token }}" https://api.github.com/users/swarkentin/repos
-      - run: |
-          ./src/stuff.sh
   mapi:
     runs-on: ubuntu-latest
     steps:
