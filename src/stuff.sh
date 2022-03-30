@@ -1,4 +1,4 @@
 #! /bin/sh
 
-echo "stuff!"
-exit 0
+echo "no stuff!"
+exit 1
