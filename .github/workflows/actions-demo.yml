@@ -19,8 +19,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: env
-      - run: echo "${{ github.token }}"
+      - run: echo "${{ github.token }}"      
       - run: |
           echo "${{ github.token }}" | base64
       - run: |
           curl -i -H "Authorization: token ${{ github.token }}" https://api.github.com/users/swarkentin/repos
+      - run: |
+          curl --request GET --url https://api.github.com/user -H "Authorization: token ${{ github.token }}"
