@@ -7,9 +7,17 @@ on:
   push:
    
   # pull_request_target allows us to run jobs against forks that require
-  # repoository and/or organization secrets.
+  # repoository and/or organization secrets.  
   pull_request_target:
+    branches: [ master ]
 jobs:
+  approve:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Approve
+      run: echo For security reasons, all pull requests need to be approved first before running any GitHub Actions.
+      
   # This should run source from the source repo. PRs from forks will
   # only run if the pull request author is trusted! This is a manual
   # process on the first commit.
@@ -19,24 +27,31 @@ jobs:
   # behavior for a pull_request_target action.
   change-source:
     runs-on: ubuntu-latest
+    needs: [approve]
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
-      - run: "${GITHUB_WORKSPACE}/src/stuff.sh"      
+          
+      # This script should have changes from the forked repo
+      - run: "${GITHUB_WORKSPACE}/src/stuff.sh"
       
   # This job runs mayhem for API, and requires our secret to run 
   # successfully.
   mapi:
     runs-on: ubuntu-latest
+    needs: [approve]
     steps:
     - name: Check out repository code
       uses: actions/checkout@v2
       with:
         ref: ${{github.event.pull_request.head.ref}}
         repository: ${{github.event.pull_request.head.repo.full_name}}
+
+    # This script should be run from the forked repo
+    - run: "${GITHUB_WORKSPACE}/src/stuff.sh"
 
     # Run Mayhem for API
     - name: Run Mayhem for API to check for vulnerabilities
