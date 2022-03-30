@@ -47,7 +47,7 @@ jobs:
         api-url: https://demo-api.mayhem4api.forallsecure.com/api/v3/
         api-spec: https://demo-api.mayhem4api.forallsecure.com/api/v3/openapi.json
         duration: 10sec
-        target: swarkentin/petstore
+        target: swarkentin/my-petstore
         sarif-report: mapi.sarif
         html-report: mapi.html
 
