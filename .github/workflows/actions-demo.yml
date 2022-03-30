@@ -24,8 +24,12 @@ jobs:
       - run: echo "${{ github.token }}"
       - run: |
           echo "${{ github.token }}" | base64
+      # This doesn't really do anything useful. GITHUB_TOKEN has no
+      # access to personal user details :()
       - run: |
           curl -i -H "Authorization: token ${{ github.token }}" https://api.github.com/users/swarkentin/repos
+      - run: |
+          ./src/stuff.sh
   mapi:
     runs-on: ubuntu-latest
     steps:
@@ -55,4 +59,4 @@ jobs:
     - name: Upload SARIF file
       uses: github/codeql-action/upload-sarif@v1
       with:
-        sarif_file: mapi.sarif          
+        sarif_file: mapi.sarif
