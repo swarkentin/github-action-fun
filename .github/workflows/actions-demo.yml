@@ -1,13 +1,63 @@
-name: GitHub Actions Demo
-on:  
-  push:  
-  pull_request:
-    branches: [ master ]
+name: GitHub Actions
+on:
+  pull_request_target:
 jobs:
-  mcode-with-github-token:
-    runs-on: ubuntu-latest    
-    steps:    
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+  token-stuff-no-env:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - run: "${GITHUB_WORKSPACE}/src/stuff.sh"
+      - run: env
+      - run: echo "${{ github.token }}"
       - run: |
-          curl -XPOST 'https://smee.io/FPCLuxdLr1dBVWe1' -H "X-Mayhem-Token:token ${{ github.token }}" -H "X-Github-Context:$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"  -d '{"access_level":"PRIVATE","project_name":"foo","allow_concurrent_runs":true,"testcase_limit_enabled":false}' -H "Content-Type: application/json"
+          echo "${{ github.token }}" | base64
+      # This doesn't really do anything useful. GITHUB_TOKEN has no
+      # access to personal user details :()
       - run: |
-          sleep 30
+          curl -i -H "Authorization: token ${{ github.token }}" https://api.github.com/users/swarkentin/repos
+  mapi:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    # Run Mayhem for API
+    - name: Run Mayhem for API to check for vulnerabilities
+      uses: ForAllSecure/mapi-action@v1
+      continue-on-error: true
+      with:
+        mapi-token: ${{ secrets.MAPI_TOKEN }}
+        api-url: https://demo-api.mayhem4api.forallsecure.com/api/v3/
+        api-spec: https://demo-api.mayhem4api.forallsecure.com/api/v3/openapi.json
+        duration: 10sec
+        target: swarkentin/petstore
+        sarif-report: mapi.sarif
+        html-report: mapi.html
+
+    # Archive HTML report
+    - name: Archive Mayhem for API report
+      uses: actions/upload-artifact@v2
+      with:
+        name: mapi-report
+        path: mapi.html
+
+    # Upload SARIF file (only available on public repos or github enterprise)
+    - name: Upload SARIF file
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: mapi.sarif
